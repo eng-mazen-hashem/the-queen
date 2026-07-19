@@ -15,28 +15,33 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      {/* Premium Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[var(--secondary)]/10 to-[var(--background)] pt-32 pb-24 px-6 text-center">
-        <div className="max-w-4xl mx-auto relative z-10">
-          <h1 className="text-5xl md:text-7xl font-extrabold text-[var(--foreground)] mb-6 tracking-tight">
+      {/* Premium Liquid Glass Hero Section */}
+      <section className="relative overflow-hidden bg-[var(--background)] pt-24 pb-32 px-6 text-center isolate">
+        {/* Animated Fluid Backgrounds */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+          <div className="absolute -top-[10%] -right-[10%] w-[50%] h-[50%] bg-[var(--accent)]/10 rounded-full blur-[100px] animate-pulse" />
+          <div className="absolute top-[20%] -left-[10%] w-[40%] h-[40%] bg-[var(--secondary)]/10 rounded-full blur-[80px]" />
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60%] h-[30%] bg-[var(--primary)]/5 rounded-t-full blur-[60px]" />
+        </div>
+
+        <div className="max-w-4xl mx-auto relative z-10 backdrop-blur-md bg-white/40 dark:bg-black/20 border border-white/30 dark:border-white/10 p-10 md:p-16 rounded-3xl shadow-2xl mt-12">
+          <h1 className="text-5xl md:text-7xl font-serif text-[var(--foreground)] mb-6 tracking-tight leading-tight">
             عطارة الملكة
-            <span className="block text-[var(--primary)] mt-4">جودة الطبيعة بين يديك</span>
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-amber-700 mt-4 italic font-medium">جودة الطبيعة بين يديك</span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed mt-6">
+          <p className="text-lg md:text-xl text-[var(--secondary)] max-w-2xl mx-auto leading-relaxed mt-6 font-light">
             اكتشف تشكيلتنا الفاخرة من الأعشاب الطبية، البهارات الأصيلة، والزيوت الطبيعية المنتقاة بعناية لتعزيز صحتك وجمالك.
           </p>
         </div>
-        
-        {/* Decorative elements */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--primary)]/5 rounded-full blur-3xl -z-10" />
       </section>
 
       {/* Product Grid */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <div className="flex justify-between items-end mb-12">
-          <div>
-            <h2 className="text-3xl font-bold text-[var(--foreground)] mb-2">المنتجات المختارة</h2>
-            <p className="text-gray-500 text-lg">أفضل ما جادت به الطبيعة من أجلك</p>
+      <section className="max-w-7xl mx-auto px-6 py-24 relative z-20">
+        <div className="flex justify-center items-end mb-16">
+          <div className="text-center w-full">
+            <h2 className="text-4xl font-serif text-[var(--foreground)] mb-4">المنتجات المختارة</h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent mx-auto mb-6" />
+            <p className="text-[var(--secondary)] text-lg font-light">أفضل ما جادت به الطبيعة من أجلك</p>
           </div>
         </div>
         

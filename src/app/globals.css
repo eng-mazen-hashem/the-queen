@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #faf8f5; /* Sand/off-white */
-  --foreground: #2d241c; /* Deep brown */
+  --background: #FAFAF9; /* Warm off-white */
+  --foreground: #0C0A09; /* Deep rich black */
   
-  --primary: #4a5d23; /* Olive green */
+  --primary: #1C1917; /* Deep slate */
   --primary-foreground: #ffffff;
   
-  --secondary: #8b5a2b; /* Earthy brown */
+  --secondary: #44403C; /* Stone gray */
   --secondary-foreground: #ffffff;
   
-  --accent: #d4a373; /* Golden sand */
-  --accent-foreground: #2d241c;
+  --accent: #CA8A04; /* Premium Gold/Amber */
+  --accent-foreground: #ffffff;
 }
 
 @theme inline {
@@ -27,18 +27,21 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
 
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-playfair), serif;
   --font-mono: var(--font-geist-mono), monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #1c1914; /* Very dark earthy tone */
-    --foreground: #f3eee8;
+    --background: #0C0A09; /* Deep rich black */
+    --foreground: #FAFAF9;
     
-    --primary: #5c742c;
-    --secondary: #a6723b;
-    --accent: #e5b98a;
+    --primary: #FAFAF9;
+    --primary-foreground: #1C1917;
+    
+    --secondary: #A8A29E;
+    --accent: #EAB308; /* Brighter gold for dark mode */
   }
 }
 

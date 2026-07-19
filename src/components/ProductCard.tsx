@@ -44,27 +44,30 @@ export default function ProductCard({ product }: ProductCardProps) {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col group"
+      className="bg-white/80 dark:bg-black/40 backdrop-blur-md rounded-2xl p-6 shadow-sm border border-[var(--secondary)]/10 hover:border-[var(--accent)]/50 hover:shadow-2xl transition-all duration-500 flex flex-col group cursor-pointer"
     >
-      <div className="w-full h-48 bg-[var(--secondary)]/10 rounded-xl mb-6 flex items-center justify-center overflow-hidden relative">
-        <div className="absolute inset-0 bg-gradient-to-tr from-[var(--secondary)]/5 to-[var(--primary)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <span className="text-5xl drop-shadow-md">🌿</span>
+      <div className="w-full h-48 bg-gradient-to-br from-[var(--background)] to-[var(--secondary)]/5 rounded-xl mb-6 flex items-center justify-center overflow-hidden relative group-hover:scale-[1.02] transition-transform duration-500">
+        <div className="absolute inset-0 bg-[var(--accent)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm" />
+        <span className="text-6xl drop-shadow-lg transform group-hover:scale-110 transition-transform duration-500">🌿</span>
       </div>
 
       <div className="flex-1 flex flex-col">
-        <h3 className="text-xl font-bold text-[var(--foreground)] mb-2">{product.name}</h3>
-        <p className="text-sm text-gray-500 mb-6 line-clamp-2 leading-relaxed">{product.description}</p>
+        <h3 className="text-xl font-serif font-semibold text-[var(--foreground)] mb-2">{product.name}</h3>
+        <p className="text-sm text-[var(--secondary)] mb-6 line-clamp-2 leading-relaxed font-light">{product.description}</p>
         
         <div className="mt-auto">
           <div className="flex flex-wrap gap-2 mb-6">
             {product.variants.map(variant => (
               <button
                 key={variant.id}
-                onClick={() => setSelectedVariant(variant)}
-                className={`px-4 py-2 text-sm font-medium rounded-full border transition-all duration-200 ${
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedVariant(variant);
+                }}
+                className={`px-4 py-1.5 text-xs font-medium rounded-full border transition-all duration-300 ${
                   selectedVariant.id === variant.id
-                    ? 'border-[var(--primary)] bg-[var(--primary)]/10 text-[var(--primary)]'
-                    : 'border-gray-200 text-gray-600 hover:border-[var(--primary)]/50 hover:bg-gray-50'
+                    ? 'border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)]'
+                    : 'border-[var(--secondary)]/20 text-[var(--secondary)] hover:border-[var(--accent)]/50 hover:bg-[var(--secondary)]/5'
                 }`}
                 dir="ltr"
               >
@@ -73,13 +76,16 @@ export default function ProductCard({ product }: ProductCardProps) {
             ))}
           </div>
 
-          <div className="flex items-center justify-between border-t border-gray-100 pt-4 mt-4">
-            <div className="text-2xl font-bold text-[var(--foreground)]">
-              {selectedVariant.price.toFixed(2)} <span className="text-sm font-normal text-gray-500">د.إ</span>
+          <div className="flex items-center justify-between border-t border-[var(--secondary)]/10 pt-5 mt-4">
+            <div className="text-2xl font-serif text-[var(--foreground)]">
+              {selectedVariant.price.toFixed(2)} <span className="text-sm font-sans text-[var(--secondary)]">د.إ</span>
             </div>
             <button 
-              onClick={handleAddToCart}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white p-3 rounded-xl transition-all duration-300 transform active:scale-95 shadow-lg shadow-emerald-600/20"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAddToCart();
+              }}
+              className="bg-[var(--foreground)] hover:bg-[var(--accent)] text-[var(--background)] p-3 rounded-full transition-all duration-300 transform active:scale-95 shadow-lg"
             >
               <Plus size={20} />
             </button>
