@@ -16,33 +16,33 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-[var(--background)]">
       {/* Premium Liquid Glass Hero Section */}
-      <section className="relative overflow-hidden bg-[var(--background)] pt-24 pb-32 px-6 text-center isolate">
+      <section className="relative overflow-hidden bg-[var(--background)] pt-20 pb-20 px-6 text-center isolate">
         {/* Animated Fluid Backgrounds */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-          <div className="absolute -top-[10%] -right-[10%] w-[50%] h-[50%] bg-[var(--accent)]/10 rounded-full blur-[100px] animate-pulse" />
-          <div className="absolute top-[20%] -left-[10%] w-[40%] h-[40%] bg-[var(--secondary)]/10 rounded-full blur-[80px]" />
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60%] h-[30%] bg-[var(--primary)]/5 rounded-t-full blur-[60px]" />
+          <div className="absolute -top-[10%] -right-[10%] w-[50%] h-[50%] bg-[var(--accent)]/5 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute top-[20%] -left-[10%] w-[40%] h-[40%] bg-[var(--secondary)]/5 rounded-full blur-[100px]" />
         </div>
 
-        <div className="max-w-4xl mx-auto relative z-10 backdrop-blur-md bg-white/40 dark:bg-black/20 border border-white/30 dark:border-white/10 p-10 md:p-16 rounded-3xl shadow-2xl mt-12">
-          <h1 className="text-5xl md:text-7xl font-serif text-[var(--foreground)] mb-6 tracking-tight leading-tight">
+        <div className="max-w-3xl mx-auto relative z-10 p-8 md:p-12 border-y border-[var(--border)] mt-12">
+          <h1 className="text-5xl md:text-7xl font-serif text-[var(--foreground)] mb-4 tracking-tight leading-tight uppercase font-medium">
             عطارة الملكة
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-amber-700 mt-4 italic font-medium">جودة الطبيعة بين يديك</span>
           </h1>
-          <p className="text-lg md:text-xl text-[var(--secondary)] max-w-2xl mx-auto leading-relaxed mt-6 font-light">
+          <div className="w-12 h-[1px] bg-[var(--accent)] mx-auto my-6" />
+          <p className="text-xl md:text-2xl font-serif text-[var(--accent)] italic mb-6">
+            جودة الطبيعة بين يديك
+          </p>
+          <p className="text-base md:text-lg text-[var(--secondary)] max-w-2xl mx-auto leading-relaxed font-light tracking-wide">
             اكتشف تشكيلتنا الفاخرة من الأعشاب الطبية، البهارات الأصيلة، والزيوت الطبيعية المنتقاة بعناية لتعزيز صحتك وجمالك.
           </p>
         </div>
       </section>
 
       {/* Product Grid */}
-      <section className="max-w-7xl mx-auto px-6 py-24 relative z-20">
-        <div className="flex justify-center items-end mb-16">
-          <div className="text-center w-full">
-            <h2 className="text-4xl font-serif text-[var(--foreground)] mb-4">المنتجات المختارة</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent mx-auto mb-6" />
-            <p className="text-[var(--secondary)] text-lg font-light">أفضل ما جادت به الطبيعة من أجلك</p>
-          </div>
+      <section className="max-w-7xl mx-auto px-6 py-20 relative z-20">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-serif text-[var(--foreground)] tracking-wide mb-3">المنتجات المختارة</h2>
+          <p className="text-sm uppercase tracking-[0.2em] text-[var(--accent)] font-medium mb-4">أفضل ما جادت به الطبيعة من أجلك</p>
+          <div className="w-8 h-[1px] bg-[var(--border)] mx-auto" />
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">

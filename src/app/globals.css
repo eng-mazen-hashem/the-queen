@@ -10,8 +10,10 @@
   --secondary: #44403C; /* Stone gray */
   --secondary-foreground: #ffffff;
   
-  --accent: #CA8A04; /* Premium Gold/Amber */
+  --accent: #A16207; /* Premium gold, WCAG 3:1 compliant */
   --accent-foreground: #ffffff;
+
+  --border: #D6D3D1;
 }
 
 @theme inline {
@@ -26,9 +28,10 @@
   
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
 
-  --font-sans: var(--font-inter), system-ui, sans-serif;
-  --font-serif: var(--font-playfair), serif;
+  --font-sans: var(--font-jost), system-ui, sans-serif;
+  --font-serif: var(--font-bodoni), serif;
   --font-mono: var(--font-geist-mono), monospace;
 }
 
@@ -41,7 +44,8 @@
     --primary-foreground: #1C1917;
     
     --secondary: #A8A29E;
-    --accent: #EAB308; /* Brighter gold for dark mode */
+    --accent: #D97706; /* Accessible bright gold for dark mode */
+    --border: #44403C;
   }
 }
 
