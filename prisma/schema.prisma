@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password      String?
+  role          Role     @default(CUSTOMER)
+  loyaltyPoints Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  orders        Order[]
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  slug        String    @unique
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Product {
+  id          String           @id @default(cuid())
+  name        String
+  description String
+  slug        String           @unique
+  categoryId  String
+  category    Category         @relation(fields: [categoryId], references: [id])
+  offerId     String?
+  offer       Offer?           @relation(fields: [offerId], references: [id])
+  variants    ProductVariant[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model ProductVariant {
+  id          String      @id @default(cuid())
+  productId   String
+  product     Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  weight      String      // e.g., "50g", "100g", "1kg"
+  price       Decimal
+  stock       Int         @default(0)
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  status      OrderStatus @default(PENDING)
+  totalAmount Decimal
+  items       OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model OrderItem {
+  id        String         @id @default(cuid())
+  orderId   String
+  order     Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+  quantity  Int
+  price     Decimal
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+model Offer {
+  id            String       @id @default(cuid())
+  name          String
+  discountType  DiscountType
+  discountValue Decimal
+  startDate     DateTime
+  endDate       DateTime
+  products      Product[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
