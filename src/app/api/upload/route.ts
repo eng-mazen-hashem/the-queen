@@ -1,7 +1,24 @@
 import { NextResponse } from 'next/server';
+import { promises as fs } from 'fs';
+import path from 'path';
+
+// Dynamically import sharp to support fail-safe fallback
+let sharp: any = null;
+try {
+  sharp = require('sharp');
+} catch (e) {
+  console.warn('Sharp is not available. Falling back to raw file saving.', e);
+}
 
 export async function POST(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const type = searchParams.get('type') || 'banners'; // banners, categories, products
+    
+    // Validate type to prevent path traversal
+    const allowedTypes = ['banners', 'categories', 'products'];
+    const validatedType = allowedTypes.includes(type) ? type : 'banners';
+
     const formData = await request.formData();
     const file = formData.get('file') as File;
     
@@ -9,32 +26,49 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
     }
 
-    const filename = file.name.toLowerCase();
-    
-    // Premium placeholder images tailored for spices / attara
-    let imageUrl = 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=1200&q=80'; // Default spices
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    if (filename.includes('banner')) {
-      // Return a random beautiful banner photo
-      const banners = [
-        'https://images.unsplash.com/photo-1509358271058-acd22cc93898?auto=format&fit=crop&w=1600&q=80',
-        'https://images.unsplash.com/photo-1540324155974-7295d7af6a1b?auto=format&fit=crop&w=1600&q=80',
-        'https://images.unsplash.com/photo-1515536067531-29bc1ed888c5?auto=format&fit=crop&w=1600&q=80'
-      ];
-      imageUrl = banners[Math.floor(Math.random() * banners.length)];
-    } else if (filename.includes('herb') || filename.includes('mint') || filename.includes('tea') || filename.includes('أعشاب')) {
-      imageUrl = 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=600&q=80'; // Herbs
-    } else if (filename.includes('oil') || filename.includes('زيت') || filename.includes('زيوت')) {
-      imageUrl = 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=600&q=80'; // Oils
-    } else if (filename.includes('spice') || filename.includes('pepper') || filename.includes('curry') || filename.includes('بهار') || filename.includes('توابل')) {
-      imageUrl = 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=600&q=80'; // Spices
+    // Ensure uploads directory exists
+    const uploadsDir = path.join(process.cwd(), 'public', 'uploads', validatedType);
+    await fs.mkdir(uploadsDir, { recursive: true });
+
+    const originalName = file.name;
+    const sanitizedName = originalName.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const timestamp = Date.now();
+    const baseName = sanitizedName.substring(0, sanitizedName.lastIndexOf('.')) || sanitizedName;
+    const ext = sanitizedName.substring(sanitizedName.lastIndexOf('.')) || '.jpg';
+
+    let finalFilename = `${timestamp}_${baseName}${ext}`;
+    let relativePath = `/uploads/${validatedType}/${finalFilename}`;
+
+    // Try WebP compression using sharp
+    if (sharp) {
+      try {
+        const webpFilename = `${timestamp}_${baseName}.webp`;
+        const webpBuffer = await sharp(buffer)
+          .webp({ quality: 80 })
+          .toBuffer();
+        
+        const destination = path.join(uploadsDir, webpFilename);
+        await fs.writeFile(destination, webpBuffer);
+        
+        finalFilename = webpFilename;
+        relativePath = `/uploads/${validatedType}/${webpFilename}`;
+      } catch (sharpError) {
+        console.error('Sharp compression failed, saving raw file:', sharpError);
+        const destination = path.join(uploadsDir, finalFilename);
+        await fs.writeFile(destination, buffer);
+      }
+    } else {
+      // Fallback: Save raw buffer
+      const destination = path.join(uploadsDir, finalFilename);
+      await fs.writeFile(destination, buffer);
     }
 
-    // Wait 500ms to simulate network latency
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    return NextResponse.json({ success: true, url: imageUrl });
+    return NextResponse.json({ success: true, url: relativePath });
   } catch (error: any) {
+    console.error('Upload API error:', error);
     return NextResponse.json({ error: error.message || 'Upload failed' }, { status: 500 });
   }
 }

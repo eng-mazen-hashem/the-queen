@@ -16,6 +16,7 @@ type ProductCardProps = {
     id: string;
     name: string;
     description: string;
+    imageUrl?: string | null;
     variants: Variant[];
   };
 };
@@ -48,7 +49,15 @@ export default function ProductCard({ product }: ProductCardProps) {
     >
       <div className="w-full h-56 bg-neutral-50 dark:bg-neutral-900 border-b border-[var(--border)] -mx-6 -mt-6 mb-6 flex items-center justify-center overflow-hidden relative">
         <div className="absolute inset-0 bg-[var(--accent)]/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        <Sprout size={48} className="text-[var(--accent)] opacity-40 group-hover:scale-110 transition-transform duration-500 stroke-[1.2]" />
+        {product.imageUrl ? (
+          <img 
+            src={product.imageUrl} 
+            alt={product.name} 
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        ) : (
+          <Sprout size={48} className="text-[var(--accent)] opacity-40 group-hover:scale-110 transition-transform duration-500 stroke-[1.2]" />
+        )}
       </div>
 
       <div className="flex-1 flex flex-col pt-2">

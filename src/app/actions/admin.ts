@@ -50,6 +50,7 @@ export async function addProduct(data: {
   slug: string;
   description: string;
   categoryId: string;
+  imageUrl?: string;
   variants: { weight: string; price: number; stock: number }[];
 }) {
   try {
@@ -59,6 +60,7 @@ export async function addProduct(data: {
         slug: data.slug,
         description: data.description,
         categoryId: data.categoryId,
+        imageUrl: data.imageUrl || '',
         variants: {
           create: data.variants.map((v) => ({
             weight: v.weight,

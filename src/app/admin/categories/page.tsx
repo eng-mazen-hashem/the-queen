@@ -50,7 +50,7 @@ export default function AdminCategoriesPage() {
     formData.append('file', file);
 
     try {
-      const res = await fetch('/api/upload', {
+      const res = await fetch('/api/upload?type=categories', {
         method: 'POST',
         body: formData,
       });

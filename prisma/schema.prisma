@@ -39,6 +39,7 @@ model Product {
   name        String
   description String
   slug        String           @unique
+  imageUrl    String?
   categoryId  String
   category    Category         @relation(fields: [categoryId], references: [id])
   offerId     String?
