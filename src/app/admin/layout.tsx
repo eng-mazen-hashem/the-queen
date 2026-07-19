@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Package, ShoppingCart, Tag, Users, LayoutDashboard } from 'lucide-react';
+import { Package, ShoppingCart, Tag, Users, LayoutDashboard, Layers } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -12,13 +12,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
         
         <nav className="flex-1 px-4 space-y-2 mt-4">
-          <Link href="/admin" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-            <LayoutDashboard size={20} />
-            <span>الرئيسية</span>
-          </Link>
-          <Link href="/admin/products" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors bg-white/5">
+          <Link href="/admin/products" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
             <Package size={20} />
             <span>المنتجات</span>
+          </Link>
+          <Link href="/admin/categories" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
+            <Layers size={20} />
+            <span>الأقسام</span>
           </Link>
           <Link href="/admin/orders" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
             <ShoppingCart size={20} />

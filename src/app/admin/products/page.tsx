@@ -4,7 +4,8 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Plus, Trash2, Save } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { addProduct } from '@/app/actions/admin';
 
 const variantSchema = z.object({
   weight: z.string().min(1, 'الوزن مطلوب (مثال: 50g)'),
@@ -24,6 +25,22 @@ type ProductFormValues = z.infer<typeof productSchema>;
 
 export default function AdminProductsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch('/api/categories');
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setCategories(data);
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const {
     register,
@@ -50,13 +67,22 @@ export default function AdminProductsPage() {
   const onSubmit = async (data: ProductFormValues) => {
     setIsSubmitting(true);
     try {
-      // In a real scenario, we'd POST this to our API route to save to Prisma
-      console.log('Product submitted:', data);
-      alert('تمت إضافة المنتج بنجاح (Simulation)');
-      reset();
+      const res = await addProduct(data);
+      if (res.success) {
+        alert('تمت إضافة المنتج بنجاح');
+        reset({
+          name: '',
+          slug: '',
+          description: '',
+          categoryId: '',
+          variants: [{ weight: '', price: 0, stock: 0 }],
+        });
+      } else {
+        alert(res.error || 'حدث خطأ أثناء حفظ المنتج');
+      }
     } catch (error) {
       console.error(error);
-      alert('حدث خطأ أثناء حفظ المنتج');
+      alert('حدث خطأ غير متوقع');
     } finally {
       setIsSubmitting(false);
     }
@@ -109,12 +135,14 @@ export default function AdminProductsPage() {
           <label className="block text-sm font-bold mb-2 text-gray-700">التصنيف</label>
           <select 
             {...register('categoryId')}
-            className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-[var(--primary)] text-gray-800" 
+            className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-[var(--primary)] text-gray-800 bg-transparent" 
           >
             <option value="">اختر التصنيف...</option>
-            <option value="herbs">أعشاب طبية</option>
-            <option value="spices">بهارات طبخ</option>
-            <option value="oils">زيوت طبيعية</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
           </select>
           {errors.categoryId && <p className="text-red-500 text-sm mt-1">{errors.categoryId.message}</p>}
         </div>
