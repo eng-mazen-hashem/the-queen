@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { ShoppingBag, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Link from 'next/link';
+import { formatPrice, formatTotal } from '@/lib/formatters';
 
 export default function CheckoutPage() {
   const { items, getTotal, clearCart } = useCartStore();
@@ -83,13 +84,13 @@ export default function CheckoutPage() {
                       <p className="text-sm font-medium text-[var(--foreground)]">{item.name}</p>
                       <p className="text-xs text-[var(--secondary)] font-light mt-0.5">{item.weight} <span className="mx-1">×</span> {item.quantity}</p>
                     </div>
-                    <p className="text-sm font-medium text-[var(--foreground)]">{(item.price * item.quantity).toFixed(2)} د.إ</p>
+                    <p className="text-sm font-medium text-[var(--foreground)]">{formatPrice(item.price * item.quantity)}</p>
                   </div>
                 ))}
               </div>
               <div className="flex justify-between items-center text-lg font-serif pt-2 font-semibold">
                 <span className="text-[var(--foreground)]">الإجمالي المطلوب:</span>
-                <span className="text-emerald-600 text-xl">{getTotal().toFixed(2)} د.إ</span>
+                <span className="text-emerald-600 text-xl">{formatTotal(getTotal())}</span>
               </div>
             </div>
           </div>

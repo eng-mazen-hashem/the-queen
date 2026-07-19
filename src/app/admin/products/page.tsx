@@ -254,7 +254,7 @@ export default function AdminProductsPage() {
                 </div>
                 
                 <div className="flex-1 w-full">
-                  <label className="block text-xs text-[var(--secondary)] mb-1">السعر (د.إ)</label>
+                  <label className="block text-xs text-[var(--secondary)] mb-1">السعر (ج.م)</label>
                   <input 
                     required
                     type="number" step="0.01"

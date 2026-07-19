@@ -4,6 +4,7 @@ import { useCartStore } from '@/store/cartStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ShoppingBag, Plus, Minus, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { formatPrice, formatTotal } from '@/lib/formatters';
 
 export default function CartDrawer() {
   const { isOpen, setIsOpen, items, updateQuantity, removeItem, getTotal } = useCartStore();
@@ -87,7 +88,7 @@ export default function CartDrawer() {
                       </div>
                     </div>
                     <div className="font-bold text-[var(--primary)] flex flex-col justify-end">
-                      {(item.price * item.quantity).toFixed(2)} د.إ
+                      {formatPrice(item.price * item.quantity)}
                     </div>
                   </div>
                 ))
@@ -99,7 +100,7 @@ export default function CartDrawer() {
               <div className="p-4 border-t border-[var(--secondary)]/20 bg-[var(--background)]">
                 <div className="flex justify-between items-center mb-4 text-lg font-bold text-[var(--foreground)]">
                   <span>الإجمالي:</span>
-                  <span className="text-[var(--primary)]">{getTotal().toFixed(2)} د.إ</span>
+                  <span className="text-[var(--primary)]">{formatTotal(getTotal())}</span>
                 </div>
                 <button 
                   onClick={() => {

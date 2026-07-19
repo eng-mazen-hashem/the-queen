@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useCartStore } from '@/store/cartStore';
 import { Plus, Sprout } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { formatNumber, CURRENCY_SYMBOL } from '@/lib/formatters';
 
 type Variant = {
   id: string;
@@ -87,7 +88,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           <div className="flex items-center justify-between border-t border-[var(--border)] pt-4 mt-4">
             <div className="text-xl font-serif font-medium text-[var(--foreground)]">
-              {selectedVariant.price.toFixed(2)} <span className="text-xs font-sans font-light text-[var(--secondary)]">د.إ</span>
+              {formatNumber(selectedVariant.price)} <span className="text-xs font-sans font-light text-[var(--secondary)]">{CURRENCY_SYMBOL}</span>
             </div>
             <button 
               onClick={(e) => {

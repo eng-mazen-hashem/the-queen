@@ -1,8 +1,9 @@
 import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
-import { CheckCircle2, PackageCheck } from 'lucide-react';
+import { CheckCircle2, PackageCheck, Gem } from 'lucide-react';
 import SimulateDeliveryButton from './SimulateDeliveryButton';
 import Link from 'next/link';
+import { formatPrice, formatTotal } from '@/lib/formatters';
 
 export default async function OrderConfirmationPage({ params }: { params: { id: string } }) {
   const order = await prisma.order.findUnique({
@@ -39,13 +40,13 @@ export default async function OrderConfirmationPage({ params }: { params: { id: 
             {order.items.map(item => (
               <div key={item.id} className="flex justify-between text-sm">
                 <span>{item.variant.product.name} <span className="text-gray-500">({item.variant.weight})</span> <span className="mx-1 text-gray-400">×</span> {item.quantity}</span>
-                <span className="font-bold">{(Number(item.price) * item.quantity).toFixed(2)} د.إ</span>
+                <span className="font-bold">{formatPrice(Number(item.price) * item.quantity)}</span>
               </div>
             ))}
           </div>
           <div className="border-t border-gray-200 pt-4 mt-4 flex justify-between font-bold text-lg">
             <span>الإجمالي:</span>
-            <span className="text-[var(--primary)]">{Number(order.totalAmount).toFixed(2)} د.إ</span>
+            <span className="text-[var(--primary)]">{formatTotal(Number(order.totalAmount))}</span>
           </div>
         </div>
 
@@ -61,7 +62,7 @@ export default async function OrderConfirmationPage({ params }: { params: { id: 
 
         {isDelivered && (
           <div className="mt-8 p-6 border-2 border-emerald-100 bg-emerald-50 rounded-2xl text-emerald-800 flex flex-col items-center">
-            <span className="text-4xl mb-2">💎</span>
+            <Gem size={40} className="mb-2 text-emerald-600" />
             <h3 className="font-bold text-lg mb-1">مبروك! لقد كسبت نقاط ولاء</h3>
             <p className="text-sm">بفضل هذا الطلب، أصبح رصيدك الكلي من نقاط الولاء: <strong className="text-xl">{order.user.loyaltyPoints}</strong> نقطة.</p>
           </div>
