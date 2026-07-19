@@ -4,15 +4,16 @@
   --background: #FAFAF9; /* Warm off-white */
   --foreground: #0C0A09; /* Deep rich black */
   
-  --primary: #1C1917; /* Deep slate */
+  --primary: #063923; /* Deep Forest Green from logo */
   --primary-foreground: #ffffff;
   
-  --secondary: #44403C; /* Stone gray */
+  --secondary: #4A5568; /* Slate gray */
   --secondary-foreground: #ffffff;
   
-  --accent: #A16207; /* Premium gold, WCAG 3:1 compliant */
+  --accent: #C5A059; /* Royal Gold from logo */
   --accent-foreground: #ffffff;
 
+  --lavender: #8B5CF6; /* Lavender secondary accent */
   --border: #D6D3D1;
 }
 
@@ -28,6 +29,7 @@
   
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-lavender: var(--lavender);
   --color-border: var(--border);
 
   --font-sans: var(--font-jost), system-ui, sans-serif;
@@ -37,15 +39,15 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0C0A09; /* Deep rich black */
+    --background: #042416; /* Deep dark forest green background matching the brand logo */
     --foreground: #FAFAF9;
     
     --primary: #FAFAF9;
-    --primary-foreground: #1C1917;
+    --primary-foreground: #063923;
     
-    --secondary: #A8A29E;
-    --accent: #D97706; /* Accessible bright gold for dark mode */
-    --border: #44403C;
+    --secondary: #A0AEC0;
+    --accent: #D4AF37; /* Lighter bright gold for dark mode visibility */
+    --border: #063923;
   }
 }
 

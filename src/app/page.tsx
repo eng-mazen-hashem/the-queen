@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 import ProductCard from '@/components/ProductCard';
 import HeroCarousel from '@/components/HeroCarousel';
+import Header from '@/components/Header';
 import Link from 'next/link';
 
 export const revalidate = 10; // ISR cache
@@ -25,6 +26,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-[var(--background)] flex flex-col justify-between">
       <div>
+        <Header />
         {/* Dynamic Hero Carousel */}
         <HeroCarousel banners={banners} />
 

@@ -5,10 +5,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="flex h-screen bg-[var(--background)]" dir="rtl">
       {/* Sidebar */}
-      <aside className="w-64 bg-[var(--foreground)] text-[var(--background)] flex flex-col">
-        <div className="p-6">
-          <h2 className="text-2xl font-bold text-[var(--accent)]">لوحة الإدارة</h2>
-          <p className="text-sm opacity-70 mt-1">عطارة الملكة</p>
+      <aside className="w-64 bg-[var(--primary)] text-[var(--background)] flex flex-col border-l border-[var(--border)]">
+        <div className="p-6 flex items-center gap-3 border-b border-white/10">
+          <div className="w-10 h-10 rounded-full overflow-hidden border border-[var(--accent)] flex-shrink-0">
+            <img src="/logo.jpg" alt="Logo" className="w-full h-full object-cover" />
+          </div>
+          <div>
+            <h2 className="text-base font-serif font-bold text-[var(--accent)] leading-none mb-1">لوحة الإدارة</h2>
+            <p className="text-[9px] opacity-70">عطارة الملكة</p>
+          </div>
         </div>
         
         <nav className="flex-1 px-4 space-y-2 mt-4">
