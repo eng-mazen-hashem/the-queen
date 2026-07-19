@@ -1,13 +1,14 @@
 'use client';
 
 import { useCartStore } from '@/store/cartStore';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { X, ShoppingBag, Plus, Minus, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { formatPrice, formatTotal } from '@/lib/formatters';
 
 export default function CartDrawer() {
   const { isOpen, setIsOpen, items, updateQuantity, removeItem, getTotal } = useCartStore();
+  const shouldReduceMotion = useReducedMotion();
   
   // Prevent hydration mismatch
   const [mounted, setMounted] = useState(false);
@@ -24,29 +25,35 @@ export default function CartDrawer() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.5 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: shouldReduceMotion ? 0.1 : 0.3 }}
             onClick={() => setIsOpen(false)}
             className="fixed inset-0 bg-black/50 z-40"
+            aria-hidden="true"
           />
 
-          {/* Drawer (RTL support: slides from the right side) */}
+          {/* Drawer */}
           <motion.div
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+            initial={{ x: shouldReduceMotion ? 0 : '100%', opacity: shouldReduceMotion ? 0 : 1 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: shouldReduceMotion ? 0 : '100%', opacity: shouldReduceMotion ? 0 : 1 }}
+            transition={shouldReduceMotion ? { duration: 0.15 } : { type: 'spring', damping: 20, stiffness: 300 }}
             className="fixed top-0 right-0 h-full w-full sm:w-[400px] bg-[var(--background)] shadow-2xl z-50 flex flex-col"
+            role="dialog"
+            aria-modal="true"
+            aria-label="سلة المشتريات"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-[var(--secondary)]/20">
               <div className="flex items-center gap-2 text-[var(--primary)]">
-                <ShoppingBag size={24} />
+                <ShoppingBag size={24} aria-hidden="true" />
                 <h2 className="text-xl font-bold">سلة المشتريات</h2>
               </div>
-              <button 
+              <button
                 onClick={() => setIsOpen(false)}
-                className="p-2 text-[var(--foreground)] hover:text-[var(--primary)] transition-colors"
+                aria-label="إغلاق السلة"
+                className="p-2 min-w-[44px] min-h-[44px] text-[var(--foreground)] hover:text-[var(--primary)] transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--accent)] focus-visible:outline-offset-2 rounded-full"
               >
-                <X size={24} />
+                <X size={24} aria-hidden="true" />
               </button>
             </div>
 
@@ -65,25 +72,28 @@ export default function CartDrawer() {
                       <p className="text-sm text-[var(--secondary)]">{item.weight}</p>
                       <div className="flex items-center gap-4 mt-2">
                         <div className="flex items-center gap-2 bg-[var(--background)] border border-[var(--secondary)]/20 rounded-md p-1">
-                          <button 
+                          <button
                             onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                            className="p-1 hover:text-[var(--primary)] transition-colors"
+                            aria-label={`تقليل كمية ${item.name}`}
+                            className="p-1 min-w-[36px] min-h-[36px] hover:text-[var(--primary)] transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--accent)] rounded"
                           >
-                            <Minus size={16} />
+                            <Minus size={16} aria-hidden="true" />
                           </button>
-                          <span className="w-6 text-center font-medium">{item.quantity}</span>
-                          <button 
+                          <span className="w-6 text-center font-medium" aria-label={`الكمية: ${item.quantity}`}>{item.quantity}</span>
+                          <button
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            className="p-1 hover:text-[var(--primary)] transition-colors"
+                            aria-label={`زيادة كمية ${item.name}`}
+                            className="p-1 min-w-[36px] min-h-[36px] hover:text-[var(--primary)] transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--accent)] rounded"
                           >
-                            <Plus size={16} />
+                            <Plus size={16} aria-hidden="true" />
                           </button>
                         </div>
-                        <button 
+                        <button
                           onClick={() => removeItem(item.id)}
-                          className="text-red-500 hover:text-red-700 transition-colors p-1"
+                          aria-label={`حذف ${item.name} من السلة`}
+                          className="text-red-500 hover:text-red-700 transition-colors p-1 min-w-[36px] min-h-[36px] cursor-pointer focus-visible:outline-2 focus-visible:outline-red-400 rounded"
                         >
-                          <Trash2 size={18} />
+                          <Trash2 size={18} aria-hidden="true" />
                         </button>
                       </div>
                     </div>

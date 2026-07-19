@@ -255,34 +255,37 @@ export default function AdminProductsPage() {
                 
                 <div className="flex-1 w-full">
                   <label className="block text-xs text-[var(--secondary)] mb-1">السعر (ج.م)</label>
-                  <input 
+                  <input
                     required
                     type="number" step="0.01"
-                    {...register(`variants.${index}.price` as const, { valueAsNumber: true })} 
-                    className="w-full border border-[var(--border)] bg-transparent rounded-none p-2 outline-none focus:border-[var(--accent)] text-sm transition-colors text-[var(--foreground)] font-mono text-left" 
+                    inputMode="decimal"
+                    {...register(`variants.${index}.price` as const, { valueAsNumber: true })}
+                    className="w-full border border-[var(--border)] bg-transparent rounded-none p-2 outline-none focus:border-[var(--accent)] text-sm transition-colors text-[var(--foreground)] font-mono text-left"
                   />
                   {errors.variants?.[index]?.price && <p className="text-red-500 text-xs mt-1">{errors.variants[index]?.price?.message}</p>}
                 </div>
 
                 <div className="flex-1 w-full">
                   <label className="block text-xs text-[var(--secondary)] mb-1">الكمية المتوفرة</label>
-                  <input 
+                  <input
                     required
                     type="number"
-                    {...register(`variants.${index}.stock` as const, { valueAsNumber: true })} 
-                    className="w-full border border-[var(--border)] bg-transparent rounded-none p-2 outline-none focus:border-[var(--accent)] text-sm transition-colors text-[var(--foreground)] font-mono text-left" 
+                    inputMode="numeric"
+                    {...register(`variants.${index}.stock` as const, { valueAsNumber: true })}
+                    className="w-full border border-[var(--border)] bg-transparent rounded-none p-2 outline-none focus:border-[var(--accent)] text-sm transition-colors text-[var(--foreground)] font-mono text-left"
                   />
                   {errors.variants?.[index]?.stock && <p className="text-red-500 text-xs mt-1">{errors.variants[index]?.stock?.message}</p>}
                 </div>
 
                 <div className="pt-6">
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={() => remove(index)}
                     disabled={fields.length === 1}
-                    className="text-red-500 hover:text-red-700 disabled:opacity-30 p-2 cursor-pointer"
+                    aria-label="حذف هذا التخيل"
+                    className="text-red-500 hover:text-red-700 disabled:opacity-30 p-2 cursor-pointer min-w-[44px] min-h-[44px] focus-visible:outline-2 focus-visible:outline-red-400"
                   >
-                    <Trash2 size={18} />
+                    <Trash2 size={18} aria-hidden="true" />
                   </button>
                 </div>
               </div>

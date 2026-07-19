@@ -20,7 +20,14 @@ export default function Header() {
         {/* Right side: Logo & Brand Name */}
         <Link href="/" className="flex items-center gap-3 group">
           <div className="w-10 h-10 rounded-full overflow-hidden border border-[var(--accent)] flex-shrink-0">
-            <img src="/logo.jpg" alt="عطارة الملكة" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+            <img
+              src="/logo.jpg"
+              alt="شعار عطارة الملكة"
+              loading="eager"
+              width={40}
+              height={40}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+            />
           </div>
           <div>
             <h1 className="text-xl font-serif text-[var(--primary)] dark:text-[var(--accent)] font-semibold tracking-wide leading-none mb-1">
@@ -42,12 +49,16 @@ export default function Header() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => setIsOpen(true)}
-            className="relative p-2.5 hover:bg-neutral-50 dark:hover:bg-neutral-900 border border-transparent hover:border-[var(--border)] transition-all rounded-full cursor-pointer group"
-            title="سلة المشتريات"
+            aria-label={totalItems > 0 ? `افتح سلة المشتريات — ${totalItems} عنصر` : 'افتح سلة المشتريات'}
+            className="relative p-2.5 hover:bg-neutral-50 dark:hover:bg-neutral-900 border border-transparent hover:border-[var(--border)] transition-all rounded-full cursor-pointer group focus-visible:outline-2 focus-visible:outline-[var(--accent)] focus-visible:outline-offset-2"
           >
-            <ShoppingBag size={20} className="text-[var(--primary)] dark:text-[var(--accent)]" />
+            <ShoppingBag size={20} aria-hidden="true" className="text-[var(--primary)] dark:text-[var(--accent)]" />
             {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 bg-emerald-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold font-sans shadow-md border border-white">
+              <span
+                aria-live="polite"
+                aria-atomic="true"
+                className="absolute -top-1 -right-1 bg-emerald-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold font-sans shadow-md border border-white"
+              >
                 {totalItems}
               </span>
             )}
