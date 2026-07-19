@@ -8,8 +8,8 @@ import { useState } from 'react';
 
 const variantSchema = z.object({
   weight: z.string().min(1, 'الوزن مطلوب (مثال: 50g)'),
-  price: z.coerce.number().min(0.01, 'السعر يجب أن يكون أكبر من 0'),
-  stock: z.coerce.number().min(0, 'الكمية يجب أن تكون 0 أو أكثر'),
+  price: z.number().min(0.01, 'السعر يجب أن يكون أكبر من 0'),
+  stock: z.number().min(0, 'الكمية يجب أن تكون 0 أو أكثر'),
 });
 
 const productSchema = z.object({
@@ -152,7 +152,7 @@ export default function AdminProductsPage() {
                   <label className="block text-xs font-bold mb-1 text-gray-600">السعر (د.إ)</label>
                   <input 
                     type="number" step="0.01"
-                    {...register(`variants.${index}.price` as const)} 
+                    {...register(`variants.${index}.price` as const, { valueAsNumber: true })} 
                     className="w-full border border-gray-300 rounded-md p-2 outline-none focus:ring-2 focus:ring-[var(--primary)] text-gray-800 text-sm" 
                   />
                   {errors.variants?.[index]?.price && <p className="text-red-500 text-xs mt-1">{errors.variants[index]?.price?.message}</p>}
@@ -162,7 +162,7 @@ export default function AdminProductsPage() {
                   <label className="block text-xs font-bold mb-1 text-gray-600">الكمية المتوفرة</label>
                   <input 
                     type="number"
-                    {...register(`variants.${index}.stock` as const)} 
+                    {...register(`variants.${index}.stock` as const, { valueAsNumber: true })} 
                     className="w-full border border-gray-300 rounded-md p-2 outline-none focus:ring-2 focus:ring-[var(--primary)] text-gray-800 text-sm" 
                   />
                   {errors.variants?.[index]?.stock && <p className="text-red-500 text-xs mt-1">{errors.variants[index]?.stock?.message}</p>}
