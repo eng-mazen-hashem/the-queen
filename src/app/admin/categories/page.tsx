@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { addCategory } from '@/app/actions/admin';
-import { Plus, Tag, RefreshCw } from 'lucide-react';
+import { Plus, Tag, RefreshCw, Image as ImageIcon } from 'lucide-react';
 
 type Category = {
   id: string;
   name: string;
   slug: string;
   description: string | null;
+  imageUrl: string | null;
 };
 
 export default function AdminCategoriesPage() {
@@ -16,6 +17,8 @@ export default function AdminCategoriesPage() {
   const [name, setName] = useState('');
   const [slug, setSlug] = useState('');
   const [description, setDescription] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -38,17 +41,44 @@ export default function AdminCategoriesPage() {
     fetchCategories();
   }, []);
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.url) {
+        setImageUrl(data.url);
+      } else {
+        alert('فشل رفع الصورة');
+      }
+    } catch (error) {
+      alert('حدث خطأ أثناء الاتصال بالسيرفر لرفع الصورة');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      const res = await addCategory({ name, slug, description });
+      const res = await addCategory({ name, slug, description, imageUrl });
       if (res.success && res.category) {
         alert('تمت إضافة القسم بنجاح');
         setName('');
         setSlug('');
         setDescription('');
+        setImageUrl('');
         fetchCategories();
       } else {
         alert(res.error || 'حدث خطأ أثناء الإضافة');
@@ -62,7 +92,6 @@ export default function AdminCategoriesPage() {
 
   const autoGenerateSlug = (val: string) => {
     setName(val);
-    // Simple slugify for Arabic/English
     const slugified = val
       .trim()
       .toLowerCase()
@@ -108,6 +137,34 @@ export default function AdminCategoriesPage() {
             </div>
 
             <div>
+              <label className="block text-xs text-[var(--secondary)] font-medium mb-1">صورة القسم (اختياري)</label>
+              <div className="border border-dashed border-[var(--border)] p-4 text-center cursor-pointer relative hover:border-[var(--accent)] transition-colors">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                  disabled={isUploading}
+                />
+                {imageUrl ? (
+                  <div className="relative w-full h-24">
+                    <img src={imageUrl} alt="Category preview" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-white text-[10px] opacity-0 hover:opacity-100 transition-opacity">
+                      تغيير الصورة
+                    </div>
+                  </div>
+                ) : (
+                  <div className="py-2 flex flex-col items-center justify-center gap-1">
+                    <ImageIcon className="text-[var(--secondary)]" size={24} />
+                    <span className="text-[10px] text-[var(--secondary)]">
+                      {isUploading ? 'جاري الرفع...' : 'اسحب الصورة هنا أو اضغط للاختيار'}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div>
               <label className="block text-xs text-[var(--secondary)] font-medium mb-1">وصف القسم</label>
               <textarea
                 value={description}
@@ -120,7 +177,7 @@ export default function AdminCategoriesPage() {
 
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isUploading}
               className="w-full border border-[var(--primary)] bg-[var(--primary)] hover:bg-[var(--accent)] hover:border-[var(--accent)] text-[var(--primary-foreground)] hover:text-white py-2.5 rounded-none text-sm font-medium transition-all duration-300 transform active:scale-[0.99] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
             >
               <Plus size={16} />
@@ -149,7 +206,7 @@ export default function AdminCategoriesPage() {
           ) : (
             <div className="divide-y divide-[var(--border)]">
               {categories.map((cat) => (
-                <div key={cat.id} className="py-4 flex justify-between items-start gap-4">
+                <div key={cat.id} className="py-4 flex justify-between items-center gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <Tag size={14} className="text-[var(--accent)]" />
@@ -162,6 +219,12 @@ export default function AdminCategoriesPage() {
                       <p className="text-xs text-[var(--secondary)] font-light leading-relaxed">{cat.description}</p>
                     )}
                   </div>
+                  
+                  {cat.imageUrl && (
+                    <div className="w-16 h-12 bg-neutral-100 dark:bg-neutral-800 relative">
+                      <img src={cat.imageUrl} alt={cat.name} className="w-full h-full object-cover" />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

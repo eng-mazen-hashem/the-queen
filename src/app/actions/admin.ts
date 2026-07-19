@@ -27,13 +27,14 @@ export async function adminLogout() {
   return { success: true };
 }
 
-export async function addCategory(data: { name: string; slug: string; description?: string }) {
+export async function addCategory(data: { name: string; slug: string; description?: string; imageUrl?: string }) {
   try {
     const category = await prisma.category.create({
       data: {
         name: data.name,
         slug: data.slug,
         description: data.description || '',
+        imageUrl: data.imageUrl || '',
       },
     });
     revalidatePath('/');
@@ -75,5 +76,50 @@ export async function addProduct(data: {
   } catch (error: any) {
     console.error('Failed to add product:', error);
     return { success: false, error: error.message || 'حدث خطأ أثناء حفظ المنتج' };
+  }
+}
+
+export async function addBanner(data: { imageUrl: string; link?: string; title?: string; isActive?: boolean }) {
+  try {
+    const banner = await prisma.banner.create({
+      data: {
+        imageUrl: data.imageUrl,
+        link: data.link || '',
+        title: data.title || '',
+        isActive: data.isActive !== undefined ? data.isActive : true,
+      },
+    });
+    revalidatePath('/');
+    return { success: true, banner };
+  } catch (error: any) {
+    console.error('Failed to add banner:', error);
+    return { success: false, error: error.message || 'حدث خطأ أثناء حفظ البنر' };
+  }
+}
+
+export async function toggleBanner(id: string, isActive: boolean) {
+  try {
+    const banner = await prisma.banner.update({
+      where: { id },
+      data: { isActive },
+    });
+    revalidatePath('/');
+    return { success: true, banner };
+  } catch (error: any) {
+    console.error('Failed to toggle banner:', error);
+    return { success: false, error: error.message || 'حدث خطأ أثناء تعديل حالة البنر' };
+  }
+}
+
+export async function deleteBanner(id: string) {
+  try {
+    await prisma.banner.delete({
+      where: { id },
+    });
+    revalidatePath('/');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Failed to delete banner:', error);
+    return { success: false, error: error.message || 'حدث خطأ أثناء حذف البنر' };
   }
 }

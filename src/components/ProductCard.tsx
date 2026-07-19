@@ -85,7 +85,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 e.stopPropagation();
                 handleAddToCart();
               }}
-              className="border border-[var(--primary)] hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] text-[var(--foreground)] p-2.5 rounded-full transition-all duration-300 transform active:scale-95 shadow-sm"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white p-2.5 rounded-full transition-all duration-300 transform active:scale-95 shadow-md shadow-emerald-600/10 cursor-pointer animate-none"
             >
               <Plus size={16} />
             </button>
