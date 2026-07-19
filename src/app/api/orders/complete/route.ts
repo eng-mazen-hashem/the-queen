@@ -30,7 +30,7 @@ export async function POST(req: Request) {
         data: { status: 'DELIVERED' }
       });
 
-      // 3. Calculate loyalty points (e.g., 1 point per 10 AED)
+      // 3. Calculate loyalty points (e.g., 1 point per 10 EGP)
       const pointsToAward = Math.floor(Number(order.totalAmount) / 10);
 
       // 4. Award points to the user

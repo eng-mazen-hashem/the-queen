@@ -44,16 +44,27 @@ export default function CheckoutPage() {
             {/* Form */}
             <div className="lg:col-span-2 bg-white dark:bg-black/30 p-8 border border-[var(--border)] rounded-none shadow-sm h-fit">
               <h2 className="text-xl font-serif text-[var(--foreground)] mb-6 font-medium border-b border-[var(--border)] pb-2">بيانات التوصيل</h2>
-              <form action={(formData) => {
+              <form action={async (formData) => {
                 setIsPending(true);
                 formData.append('cart', JSON.stringify(items));
                 formData.append('totalAmount', getTotal().toString());
-                createOrderAction(formData).then(() => {
-                  clearCart();
-                }).catch(e => {
-                  alert('حدث خطأ');
+                
+                try {
+                  const res = await createOrderAction(formData);
+                  if (res && 'error' in res) {
+                    alert(res.error);
+                    setIsPending(false);
+                  } else if (res && 'success' in res && res.orderId) {
+                    clearCart();
+                    window.location.href = `/orders/${res.orderId}`;
+                  } else {
+                    alert('حدث خطأ غير متوقع');
+                    setIsPending(false);
+                  }
+                } catch (e) {
+                  alert('حدث خطأ أثناء معالجة طلبك.');
                   setIsPending(false);
-                });
+                }
               }} className="space-y-4">
                 <div>
                   <label className="block text-xs uppercase tracking-wider text-[var(--secondary)] font-medium mb-1">الاسم الكامل</label>
